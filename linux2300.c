@@ -207,6 +207,8 @@ int write_device(WEATHERSTATION serdevice, unsigned char *buffer, int size)
 {
 	int ret = write(serdevice, buffer, size);
 	tcdrain(serdevice);	// wait for all output written
+	usleep(50000);
+
 	return ret;
 }
 
