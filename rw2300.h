@@ -63,7 +63,7 @@ typedef struct {
 
 struct config_type
 {
-	char   serial_device_name[50];
+	char   serial_device_name[200];
 	char   citizen_weather_id[30];
 	char   citizen_weather_passcode[30];
 	char   citizen_weather_latitude[20];
@@ -85,6 +85,10 @@ struct config_type
 	char   pgsql_connect[128];
 	char   pgsql_table[25];
 	char   pgsql_station[25];
+    char   mqtt_host[50];
+    char   mqtt_username[30];
+	char   mqtt_password[30];
+
 };
 
 struct timestamp

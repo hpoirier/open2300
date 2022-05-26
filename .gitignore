@@ -21,3 +21,10 @@ wu2300
 xml2300
 .*.un~
 ._*
+.cproject
+.project
+lib2300.so
+lib2300.so.1.12
+mqtt2300
+.settings/language.settings.xml
+.vscode/settings.json

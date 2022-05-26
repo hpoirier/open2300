@@ -2419,6 +2419,9 @@ int get_configuration(struct config_type *config, char *path)
 	strcpy(config->pgsql_connect, "hostaddr='127.0.0.1'dbname='open2300'user='postgres'"); // connection string
 	strcpy(config->pgsql_table, "weather");             // PgSQL table name
 	strcpy(config->pgsql_station, "open2300");          // Unique station id
+	strcpy(config->mqtt_host, "localhost");             // localhost, IP or domainname of server
+	strcpy(config->mqtt_username, "");                  // MQTT user name
+	strcpy(config->mqtt_password, "");                  // MQTT Password
 
 	// open the config file
 
@@ -2591,6 +2594,24 @@ int get_configuration(struct config_type *config, char *path)
 			continue;
 		}
 		
+		if ((strcmp(token,"MQTT_HOST") == 0) && (strlen(val) != 0))
+		{
+			strcpy(config->mqtt_host, val);
+			continue;
+		}
+
+		if ( (strcmp(token,"MQTT_USERNAME") == 0) && (strlen(val) != 0) )
+		{
+			strcpy(config->mqtt_username, val);
+			continue;
+		}
+
+		if ( (strcmp(token,"MQTT_PASSWORD") == 0) && (strlen(val) != 0) )
+		{
+			strcpy(config->mqtt_password, val);
+			continue;
+		}
+
 	}
 	
 	// Expose the default host names if no configuration file was found or

@@ -30,84 +30,87 @@ LSUFFIX = so
 endif
 
 CC  = gcc
-LIB = lib2300
+CXX  = g++
+LIB = lib2300.$(LSUFFIX)
 LIB_C = rw2300.c linux2300.c
 LIBOBJ = rw2300.o linux2300.o
 
-VERSION = 1.11
+VERSION = 1.12
 
 MYCPPFLAGS = -DVERSION=\"$(VERSION)\"
 CFLAGS = -Wall -O3
-CC_LDFLAGS = -L. -lm -l2300
+CC_LDFLAGS = -L. -Wl,--rpath -Wl,. -Wl,--rpath -Wl,$(prefix)/lib -l2300 -lm
 INSTALL = install
 MAKE_EXEC = $(CC) $(CPPFLAGS) $(MYCPPFLAGS) $(CFLAGS) $@.c -o $@ $(LDFLAGS) $(CC_LDFLAGS)
 
 ####### Build rules
 
-all: open2300 dump2300 dumpconfig2300 log2300 fetch2300 wu2300 cw2300 history2300 histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
+all: open2300 dump2300 dumpconfig2300 log2300 fetch2300 wu2300 cw2300 history2300 histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300 mqtt2300
 
-lib2300 :
+$(LIB) :
 	$(CC) -c -fPIC $(CPPFLAGS) $(MYCPPFLAGS) $(CFLAGS) $(LIB_C)
-	$(CC) $(LFLAGS),$@.$(LSUFFIX) -o $@.$(LSUFFIX).$(VERSION) $(LIBOBJ)
-	ln -sf $@.$(LSUFFIX).$(VERSION) $@.$(LSUFFIX)
+	$(CC) $(LFLAGS),$(@F).$(VERSION) -o $(@F).$(VERSION) $(LIBOBJ)
+	ln -sf $(@F).$(VERSION) $@
 
-open2300 : $(LIB)
+open2300 : open2300.c $(LIB)
 	$(MAKE_EXEC)
 
-dump2300 : $(LIB)
+dump2300 : dump2300.c $(LIB)
 	$(MAKE_EXEC)
 
-dumpconfig2300 : $(LIB)
+dumpconfig2300 : dumpconfig2300.c $(LIB)
 	$(MAKE_EXEC)
 
-log2300 : $(LIB)
+log2300 : log2300.c $(LIB)
 	$(MAKE_EXEC)
 
-fetch2300 : $(LIB)
+fetch2300 : fetch2300.c $(LIB)
 	$(MAKE_EXEC)
 
-srv2300 : $(LIB)
+srv2300 : srv2300.c $(LIB)
 	$(MAKE_EXEC)
 
-wu2300 : $(LIB)
+wu2300 : wu2300.c $(LIB)
 	$(MAKE_EXEC)
 
-cw2300 : $(LIB)
+cw2300 : cw2300.c $(LIB)
 	$(MAKE_EXEC)
 
-history2300 : $(LIB)
+history2300 : history2300.c $(LIB)
 	$(MAKE_EXEC)
 
-histlog2300 : $(LIB)
+histlog2300 : histlog2300.c $(LIB)
 	$(MAKE_EXEC)
 
-bin2300 : $(LIB)
+bin2300 : bin2300.c $(LIB)
 	$(MAKE_EXEC)
 
-xml2300 : $(LIB)
+xml2300 : xml2300.c $(LIB)
 	$(MAKE_EXEC)
 
-mysql2300: $(LIB)
+mysql2300: mysql2300.c $(LIB)
 	$(CC) $(CFLAGS) $@.c -o $@ -I/usr/include/mysql -L/usr/lib/mysql $(CC_LDFLAGS) -lmysqlclient
 
-pgsql2300: $(LIB)
+pgsql2300: pgsql2300.c $(LIB)
 	$(CC) $(CFLAGS) $@.c -o $@ -I/usr/include/pgsql -L/usr/lib/pgsql $(CC_LDFLAGS) -lpq
 
-sqlitelog2300: $(LIB)
+sqlitelog2300: sqlitelog2300.c $(LIB)
 	$(CC) $(CPPFLAGS) $(MYCPPFLAGS) $(CFLAGS) $@.c -o $@ $(LDFLAGS) $(CC_LDFLAGS) -lsqlite3
 
-light2300: $(LIB)
+light2300: light2300.c $(LIB)
 	$(MAKE_EXEC)
 
-interval2300: $(LIB)
+interval2300: interval2300.c $(LIB)
 	$(MAKE_EXEC)
 
-minmax2300: $(LIB)
+minmax2300: minmax2300.c $(LIB)
 	$(MAKE_EXEC)
 
-mysqlhistlog2300 : $(LIB)
+mysqlhistlog2300 : mysqlhistlog2300.c $(LIB)
 	$(CC) $(CFLAGS) $@.c -o $@ -I/usr/include/mysql -L/usr/lib/mysql $(CC_LDFLAGS) -lmysqlclient
 
+mqtt2300 : mqtt2300.cpp $(LIB)
+	$(CXX) $(CFLAGS) $< -o $@ -I/usr/include/ -L/usr/lib/ $(CC_LDFLAGS) -lmosquitto
 
 install:
 	mkdir -p $(bindir)
